@@ -27,7 +27,7 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 p-4">
+    <div className="h-screen max-w-[21rem] p-4">
       <div
         className={`h-full bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl transition-all duration-300 ${isCollapsed ? "w-28" : "w-80"
           }`}
@@ -63,7 +63,7 @@ export default function Sidebar() {
             const isActive = activeItem === item.id;
 
             return (
-              <Link to={`/${item.id}`}>
+              <Link key={`${item.id}`} to={`/${item.id}`}>
                 <button
                   key={item.id}
                   onClick={() => handleItemClick(item.id)}

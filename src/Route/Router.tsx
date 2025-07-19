@@ -4,6 +4,7 @@ import Login from "../pages/user/Login.tsx";
 import Signup from "../pages/user/Signup.tsx";
 import Sidebar from "../pages/other/Sidebar.tsx";
 import Dashboard from "../pages/user/Dashboard.tsx";
+import Clients from "../pages/user/Clients.tsx";
 
 export const router = createBrowserRouter([ 
     {
@@ -18,12 +19,13 @@ export const router = createBrowserRouter([
                 element: <Signup />
             },
             {
-                path: '/navbar',
-                element: <Sidebar />
-            },
-            {
                 path: '/dashboard',
                 element: <Dashboard />
+       
+            },
+            {
+                path: '/clients',
+                element: <Clients />
             }
         ]
     }

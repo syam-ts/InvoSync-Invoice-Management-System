@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Toaster } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserService } from "../../services/api/userServices";
 import { toastError } from "../../utils/sonner/toastError";
 import { loginValidation } from "../../Formik/loginValidation";
@@ -16,6 +16,7 @@ import {
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const submitForm = async (email: string, password: string): Promise<void> => {
     try {
@@ -26,9 +27,9 @@ const LoginPage = () => {
         toastError(response.message);
       } else {
         alert("success");
-        // localStorage.setItem("token", response.token);
+        localStorage.setItem("token", response.token);
         // dispatch(signInUser(response.user));
-        // navigate("/dashboard");
+         navigate("/dashboard");
       }
     } catch (error) {
       console.log("ERROR: ", error);
@@ -156,7 +157,7 @@ const LoginPage = () => {
               </div>
 
               <button className="w-full bg-gradient-to-r from-gray-600 to-slate-700 text-white py-4 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-transparent disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none hover:from-gray-500 hover:to-slate-600">
-                'Sign In'
+                Sign In
               </button>
             </form>
 
