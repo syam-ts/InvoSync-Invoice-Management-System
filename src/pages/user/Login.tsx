@@ -1,4 +1,9 @@
-
+import { useState } from "react";
+import { Toaster } from "sonner";
+import { Link } from "react-router-dom";
+import { UserService } from "../../services/api/userServices";
+import { toastError } from "../../utils/sonner/toastError";
+import { loginValidation } from "../../Formik/loginValidation";
 import {
   Mail,
   Lock,
@@ -8,22 +13,15 @@ import {
   FileText,
   DollarSign,
 } from "lucide-react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { UserService } from "../../services/api/userServices";
-import {Toaster } from "sonner";
-import { toastError } from "../../utils/sonner/toastError";
-import { loginValidation } from "../../Formik/loginValidation"; 
 
-export default function LoginPage() {
- 
-  const [showPassword, setShowPassword] = useState(false);
+const LoginPage = () => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const submitForm = async (email: string, password: string) => {
+  const submitForm = async (email: string, password: string): Promise<void> => {
     try {
       const response = await UserService.loginUser(email, password);
 
-      console.log("rep", response);
+      // console.log("response", response);
       if (!response.success) {
         toastError(response.message);
       } else {
@@ -82,7 +80,7 @@ export default function LoginPage() {
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input 
+                  <input
                     name="email"
                     onChange={handleChange}
                     value={values.email}
@@ -92,11 +90,9 @@ export default function LoginPage() {
                     required
                   />
                 </div>
-                  {touched.email && errors.email && (
-                                    <div className="text-red-500 text-center">
-                                        {errors.email}
-                                    </div>
-                                )}
+                {touched.email && errors.email && (
+                  <div className="text-red-500 text-center">{errors.email}</div>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -130,11 +126,11 @@ export default function LoginPage() {
                     )}
                   </button>
                 </div>
-                  {touched.password && errors.password && (
-                                    <div className="text-red-500 text-center">
-                                        {errors.password}
-                                    </div>
-                                )}
+                {touched.password && errors.password && (
+                  <div className="text-red-500 text-center">
+                    {errors.password}
+                  </div>
+                )}
               </div>
 
               <div className="flex items-center justify-between">
@@ -159,9 +155,7 @@ export default function LoginPage() {
                 </a>
               </div>
 
-              <button 
-                className="w-full bg-gradient-to-r from-gray-600 to-slate-700 text-white py-4 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-transparent disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none hover:from-gray-500 hover:to-slate-600"
-              >
+              <button className="w-full bg-gradient-to-r from-gray-600 to-slate-700 text-white py-4 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-transparent disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none hover:from-gray-500 hover:to-slate-600">
                 'Sign In'
               </button>
             </form>
@@ -208,4 +202,6 @@ export default function LoginPage() {
       </div>
     </div>
   );
-}
+};
+
+export default LoginPage;

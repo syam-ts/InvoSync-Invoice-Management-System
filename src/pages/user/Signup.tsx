@@ -1,27 +1,27 @@
 import { useState } from "react";
-import {
-  User,
-  Mail,
-  Phone,
-  Lock,
-  Eye,
-  EyeOff, 
-  FileText, 
-  Globe,
-  MapPin,
-  Users,
-} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserService } from "../../services/api/userServices";
 import { signupValidation } from "../../Formik/signupValidation";
 import { toastError } from "../../utils/sonner/toastError";
 import { languages } from "../../utils/constants/languages";
 import { countries } from "../../utils/constants/countries";
+import {
+  User,
+  Mail,
+  Phone,
+  Lock,
+  Eye,
+  EyeOff,
+  FileText,
+  Globe,
+  MapPin,
+  Users,
+} from "lucide-react";
 
-export default function SignupPage() {
-  const [showPassword, setShowPassword] = useState(false);
+const SignupPage = () => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
- 
+
   const submitForm = async (
     firstName: string,
     lastName: string,
@@ -32,7 +32,7 @@ export default function SignupPage() {
     country: string,
     state: string,
     language: string
-  ) => {
+  ): Promise<void> => {
     try {
       const response = await UserService.signupUser(
         firstName,
@@ -46,14 +46,15 @@ export default function SignupPage() {
         language
       );
 
-      console.log("rep", response);
+      // console.log("response", response);
       if (!response.success) {
         toastError(response.message);
       } else {
         navigate("/login");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log("ERROR: ", error);
+      toastError(error);
     }
   };
 
@@ -222,11 +223,11 @@ export default function SignupPage() {
                     )}
                   </button>
                 </div>
-              {touched.password && errors.password && (
-                <div className="text-red-500 text-sm mt-1">
-                  {errors.password}
-                </div>
-              )}
+                {touched.password && errors.password && (
+                  <div className="text-red-500 text-sm mt-1">
+                    {errors.password}
+                  </div>
+                )}
               </div>
               <div className="space-y-1">
                 <label
@@ -253,12 +254,14 @@ export default function SignupPage() {
                     </option>
                     <option value="female" className="bg-gray-800">
                       Female
-                    </option> 
+                    </option>
                   </select>
                 </div>
-            {touched.gender && errors.gender && (
-              <div className="text-red-500 text-sm mt-1">{errors.gender}</div>
-            )}
+                {touched.gender && errors.gender && (
+                  <div className="text-red-500 text-sm mt-1">
+                    {errors.gender}
+                  </div>
+                )}
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -293,11 +296,11 @@ export default function SignupPage() {
                     ))}
                   </select>
                 </div>
-              {touched.country && errors.country && (
-                <div className="text-red-500 text-sm mt-1">
-                  {errors.country}
-                </div>
-              )}
+                {touched.country && errors.country && (
+                  <div className="text-red-500 text-sm mt-1">
+                    {errors.country}
+                  </div>
+                )}
               </div>
               <div className="space-y-1">
                 <label
@@ -319,9 +322,11 @@ export default function SignupPage() {
                     required
                   />
                 </div>
-            {touched.state && errors.state && (
-              <div className="text-red-500 text-sm mt-1">{errors.state}</div>
-            )}
+                {touched.state && errors.state && (
+                  <div className="text-red-500 text-sm mt-1">
+                    {errors.state}
+                  </div>
+                )}
               </div>
             </div>
             <div className="space-y-1">
@@ -404,4 +409,6 @@ export default function SignupPage() {
       </div>
     </div>
   );
-}
+};
+
+export default SignupPage;
