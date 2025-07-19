@@ -1,10 +1,11 @@
 import axios from "axios";
+import { config } from "../../utils/config";
 
 export const UserService = {
     loginUser: async (email: string, password: string) => {
         try {
             const { data } = await axios.post(
-                "http://localhost:3000/api/v1/user/login",
+                `${config.backend_url}/api/v1/user/login`,
                 { email, password }
             );
 
@@ -30,7 +31,7 @@ export const UserService = {
     ) => {
         try {
             const { data } = await axios.post(
-                "http://localhost:3000/api/v1/user/signup",
+                `${config.backend_url}/api/v1/user/signup`,
                 {
                     firstName,
                     lastName,
