@@ -1,0 +1,17 @@
+export const countries: string[] = [
+    "India",
+    "United States",
+    "Canada",
+    "Brazil",
+    "Germany",
+    "France",
+    "Australia",
+    "Japan",
+    "China", 
+    "Russia",
+    "United Kingdom",
+    "Mexico",
+    "Italy",
+    "Spain", 
+    "Indonesia", 
+];

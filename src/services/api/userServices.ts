@@ -1,0 +1,55 @@
+import axios from "axios";
+
+export const UserService = {
+    loginUser: async (email: string, password: string) => {
+        try {
+            const { data } = await axios.post(
+                "http://localhost:3000/api/v1/user/login",
+                { email, password }
+            );
+
+            return data;
+        } catch (error: unknown) {
+            const err = error as { response: { data: { success: boolean } } };
+            if (!err.response.data.success) {
+                return err.response.data;
+            }
+        }
+    },
+
+    signupUser: async (
+        firstName: string,
+        lastName: string,
+        email: string,
+        password: string,
+        mobile: number,
+        gender: string,
+        country: string,
+        state: string,
+        language: string
+    ) => {
+        try {
+            const { data } = await axios.post(
+                "http://localhost:3000/api/v1/user/signup",
+                {
+                    firstName,
+                    lastName,
+                    email,
+                    password,
+                    mobile,
+                    gender,
+                    country,
+                    state,
+                    language,
+                }
+            );
+
+            return data;
+        } catch (error: unknown) {
+            const err = error as { response: { data: { success: boolean } } };
+            if (!err.response.data.success) {
+                return err.response.data;
+            }
+        }
+    },
+};
