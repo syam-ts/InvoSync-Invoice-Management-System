@@ -1,7 +1,7 @@
  
 function Clients() {
   return (
-    <div>Clients</div>
+    <div className="text-white">Clients</div>
   )
 }
 

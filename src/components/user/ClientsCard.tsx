@@ -3,8 +3,7 @@ import {
     Building2,
     DollarSign,
     Mail,
-    Phone,
-    CreditCard,
+    Phone, 
     FileText,
     MoreVertical,
     Edit,
@@ -22,8 +21,7 @@ import {
 //     numberOfInvoices: number;
 // }
 
-const ClientCard= ({ clients }: any) => {
-     
+const ClientCard = ({ clients }: any) => {
     const [showDropdown, setShowDropdown] = useState(null);
 
     const handleDropdownToggle = (clientId: any) => {
@@ -39,21 +37,21 @@ const ClientCard= ({ clients }: any) => {
     };
 
     return (
-        <div className="min-h-screen">
-            <div className="relative max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="min-h-screen pt-22">
+            <div className="relative max-w-5xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {clients.map((client: any) => (
                         <div
                             key={client._id}
-                            className="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300 group"
+                            className="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-4 shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300 group"
                         >
-                            <div className="flex items-start justify-between mb-4">
+                            <div className="flex items-start justify-between">
                                 <div className="flex items-center space-x-3">
                                     <div className="w-12 h-12 bg-gradient-to-r from-gray-600 to-slate-700 rounded-xl flex items-center justify-center shadow-lg">
                                         <Building2 className="w-6 h-6 text-white" />
                                     </div>
                                     <div>
-                                        <h3 className="text-lg font-semibold text-white group-hover:text-gray-100 transition-colors">
+                                        <h3 className="text-lg font-semibold text-white line-clamp-1 group-hover:text-gray-100 transition-colors">
                                             {client.companyName}
                                         </h3>
                                         <div className="flex items-center space-x-1 mt-1">
@@ -67,14 +65,14 @@ const ClientCard= ({ clients }: any) => {
 
                                 <div className="relative">
                                     <button
-                                        onClick={() => handleDropdownToggle(client.id)}
+                                        onClick={() => handleDropdownToggle(client._id)}
                                         className="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-all duration-200 text-gray-300 hover:text-white"
                                     >
                                         <MoreVertical className="w-4 h-4" />
                                     </button>
 
-                                    {showDropdown === client.id && (
-                                        <div className="absolute right-0 top-10 w-36 bg-white/15 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl py-2 z-10">
+                                    {showDropdown === client._id && (
+                                        <div className="absolute right-0 top-10 w-36 bg-gray-600 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl py-2 z-10">
                                             <button className="w-full px-4 py-2 text-left text-sm text-white hover:bg-white/10 transition-colors flex items-center space-x-2">
                                                 <Eye className="w-4 h-4" />
                                                 <span>View</span>
@@ -118,20 +116,6 @@ const ClientCard= ({ clients }: any) => {
                                         </p>
                                     </div>
                                 </div>
-
-                                <div className="flex items-center space-x-3">
-                                    <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                                        <CreditCard className="w-4 h-4 text-purple-400" />
-                                    </div>
-                                    <div>
-                                        <p className="text-xs text-gray-400 uppercase tracking-wide">
-                                            PAN Number
-                                        </p>
-                                        <p className="text-sm text-white font-mono">
-                                            {client.panNumber}
-                                        </p>
-                                    </div>
-                                </div>
                             </div>
 
                             <div className="pt-4 border-t border-white/10">
@@ -142,28 +126,17 @@ const ClientCard= ({ clients }: any) => {
                                         </div>
                                         <div>
                                             <p className="text-xs text-gray-400 uppercase tracking-wide">
-                                                Invoices
+                                                Invoices {client.numberOfInvoices || 0}
                                             </p>
-                                            <p className="text-lg font-bold text-white">
-                                                {client.numberOfInvoices}
-                                            </p>
+                                            <p className="text-lg font-bold text-white"></p>
                                         </div>
                                     </div>
-
-                                    <div className="text-right">
-                                        <div
-                                            className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${client.numberOfInvoices > 20
-                                                    ? "bg-green-500/20 text-green-400"
-                                                    : client.numberOfInvoices > 10
-                                                        ? "bg-yellow-500/20 text-yellow-400"
-                                                        : "bg-gray-500/20 text-gray-400"
-                                                }`}
-                                        >
-                                            {client.numberOfInvoices > 20
-                                                ? "High Volume"
-                                                : client.numberOfInvoices > 10
-                                                    ? "Active"
-                                                    : "New Client"}
+                                    <div className="flex items-center space-x-2">
+                                        <div>
+                                            <p className="text-xs text-gray-400 px-4 uppercase tracking-wide">
+                                                Paid {client.numberOfPaid || 0}
+                                            </p>
+                                            <p className="text-lg font-bold text-white"></p>
                                         </div>
                                     </div>
                                 </div>
