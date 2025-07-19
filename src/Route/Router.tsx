@@ -5,6 +5,7 @@ import Signup from "../pages/user/Signup.tsx";
 import Sidebar from "../pages/other/Sidebar.tsx";
 import Dashboard from "../pages/user/Dashboard.tsx";
 import Clients from "../pages/user/Clients.tsx";
+import InvoiceCard from "../pages/invoice/Invoices.tsx";
 
 export const router = createBrowserRouter([ 
     {
@@ -26,6 +27,10 @@ export const router = createBrowserRouter([
             {
                 path: '/clients',
                 element: <Clients />
+            },
+            {
+                path: '/client/:clientId',
+                element: <InvoiceCard />
             }
         ]
     }
