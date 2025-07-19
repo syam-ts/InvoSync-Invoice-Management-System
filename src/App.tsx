@@ -1,11 +1,16 @@
  
-import './App.css'
+import {RouterProvider } from 'react-router-dom'
+import './style/App.css' 
+ import { router } from './Route/Router.tsx'
+
+ 
+
 
 function App() { 
 
   return (
     <>
-    React
+     <RouterProvider router={router} />
     </>
   )
 }
