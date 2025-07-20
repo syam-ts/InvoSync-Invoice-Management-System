@@ -2,30 +2,25 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   FileText,
-  LayoutDashboard,
-  Users,
-  Receipt,
   User,
   LogOut,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import { menuItems } from "../../utils/constants/sidebarMenuItems";
+import { useSelector } from "react-redux";
 
-export default function Sidebar() {
+const Sidebar = () => {
+
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const [activeItem, setActiveItem] = useState<string>("dashboard");
 
-  const menuItems = [
-    { id: "dashboard", icon: LayoutDashboard, label: "Dashboard" },
-    { id: "clients", icon: Users, label: "Clients" },
-    { id: "invoices", icon: Receipt, label: "Invoices" },
-    { id: "add-client", icon: Users, label: "Add Client" },
-    { id: "add-invoice", icon: Users, label: "Add Invoice" },
-  ];
+  const user = useSelector((state: any) => state.currentUser)
 
   const handleItemClick = (itemId: string) => {
     setActiveItem(itemId);
   };
+ 
 
   return (
     <div className="h-screen max-w-[21rem] p-4">
@@ -111,8 +106,10 @@ export default function Sidebar() {
                 <User className="w-5 h-5 text-white" />
               </div>
               <div>
-                <p className="text-white text-sm font-medium">John Doe</p>
-                <p className="text-gray-400 text-xs">Freelancer</p>
+                <Link to="/profile">
+                  <p className="text-white text-sm font-medium">{user.fullName}</p>
+                  <p className="text-gray-400 text-xs">Freelancer</p>
+                </Link>
               </div>
             </div>
           </div>
@@ -121,3 +118,6 @@ export default function Sidebar() {
     </div>
   );
 }
+
+
+export default Sidebar;

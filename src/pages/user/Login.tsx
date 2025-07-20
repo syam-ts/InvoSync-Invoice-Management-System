@@ -13,10 +13,13 @@ import {
   FileText,
   DollarSign,
 } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { signInUser } from "../../redux/slices/userSlice";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const submitForm = async (email: string, password: string): Promise<void> => {
     try {
@@ -25,10 +28,10 @@ const LoginPage = () => {
       // console.log("response", response);
       if (!response.success) {
         toastError(response.message);
-      } else {
-        alert("success");
+      } else { 
+        console.log('REPONSE USER: ', response.user)
         localStorage.setItem("token", response.token);
-        // dispatch(signInUser(response.user));
+          dispatch(signInUser(response.user));
          navigate("/dashboard");
       }
     } catch (error) {
