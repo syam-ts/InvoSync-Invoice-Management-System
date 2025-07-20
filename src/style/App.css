@@ -1,0 +1,7 @@
+.pdf-safe * {
+  background: none !important;
+  color: #000 !important;
+  /* box-shadow: none !important; */
+  backdrop-filter: none !important; 
+  font-family: sans-serif !important;
+}

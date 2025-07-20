@@ -37,4 +37,25 @@ export const InvoiceService = {
             }
         }
     },
+
+    viewInvoice: async (invoiceId: string | undefined) => {
+        try {
+            const token = localStorage.getItem("token");
+            const { data } = await axios.get(
+                `${config.backend_url}/api/v1/invoice/view/${invoiceId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            return data;
+        } catch (error: unknown) {
+            const err = error as { response: { data: { success: boolean } } };
+            if (!err.response.data.success) {
+                return err.response.data;
+            }
+        }
+    },
 };

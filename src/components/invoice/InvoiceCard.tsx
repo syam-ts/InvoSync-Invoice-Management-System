@@ -12,6 +12,7 @@ import {
     Trash2,
     Eye,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const InvoiceCard = ({ invoices }: any) => {
     const [showDropdown, setShowDropdown] = useState(null);
@@ -60,7 +61,9 @@ const InvoiceCard = ({ invoices }: any) => {
                                             <div className="absolute right-0 top-10 w-40 bg-gray-600 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl py-2 z-10">
                                                 <button className="w-full px-4 py-2 text-left text-sm text-white hover:bg-white/10 transition-colors flex items-center space-x-2">
                                                     <Eye className="w-4 h-4" />
+                                                    <Link to={`/invoice/${invoice._id}`}>
                                                     <span>View</span>
+                                                    </Link>
                                                 </button>
                                                 <button className="w-full px-4 py-2 text-left text-sm text-white hover:bg-white/10 transition-colors flex items-center space-x-2">
                                                     <Download className="w-4 h-4" />

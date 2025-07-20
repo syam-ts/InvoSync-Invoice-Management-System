@@ -12,7 +12,7 @@ interface IInvoice {
     items: [];
     total: number;
     notes: string;
-    patmentGateway: string;
+    paymentGateway: string;
     paid: boolean;
 }
 
@@ -26,7 +26,7 @@ const Invoices: React.FC = () => {
             items: [],
             total: 0,
             notes: "",
-            patmentGateway: "",
+            paymentGateway: "",
             paid: false,
         },
     ]);
@@ -46,7 +46,9 @@ const Invoices: React.FC = () => {
             };
 
             getAllInvoicesFunction();
-        } catch (error) { }
+        } catch (error) {
+            console.log('ERROR: ',error)
+         }
     }, []);
 
     console.log("INVOE: ", invoices);

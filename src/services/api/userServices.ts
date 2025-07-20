@@ -126,7 +126,7 @@ export const UserService = {
         state: string
     ) => {
         try {
-            const token = localStorage.getItem("token");
+            const token = localStorage.getItem("token");    
             const { data } = await axios.put(
                 `${config.backend_url}/api/v1/user/update`,
                 {
