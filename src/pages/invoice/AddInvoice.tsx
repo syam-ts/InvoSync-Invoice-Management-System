@@ -1,20 +1,32 @@
-import {
-    FileText,
-    Building2,
-    Calendar,
-    Plus,
-    CreditCard,
-    ArrowLeft,
-    Save,
-} from "lucide-react";
 import { useEffect, useState } from "react";
 import { UserService } from "../../services/api/userServices";
 import { toastError } from "../../utils/sonner/toastError";
 import type { IClients } from "../../helper/interfaces/IClient";
 import { useNavigate } from "react-router-dom";
 import { addNewInvoiceValidation } from "../../Formik/addInvoiceValidation";
+import { InvoiceService } from "../../services/api/invoiceService";
+import { paymentGateways } from "../../utils/constants/paymentGateways";
+import {
+    FileText,
+    Building2,
+    Calendar,
+    CreditCard,
+    ArrowLeft,
+    Save,
+    Trash2,
+} from "lucide-react";
 
-const AddInvoice = () => {
+interface IItem {
+    details: string;
+    quantity: number;
+    rate: number;
+    total: number;
+    detailsError?: string;
+    quantityError?: string;
+    rateError?: string;
+}
+
+const AddInvoice: React.FC = () => {
     const [clients, setClients] = useState<IClients[]>([
         {
             _id: "",
@@ -25,12 +37,21 @@ const AddInvoice = () => {
             panNumber: "",
         },
     ]);
-
+    const [items, setItems] = useState<IItem[]>([
+        {
+            details: "",
+            quantity: 0,
+            rate: 0,
+            total: 0,
+        },
+    ]);
+    const [grandTotal, setGrandTotal] = useState<number>(0);
+    const [updateGrandTotal, setUpdateGrandTotal] = useState<boolean>(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         try {
-            const getMyClientFunction = async () => {
+            const getMyClientFunction = async (): Promise<void> => {
                 const response = await UserService.getMyClients();
 
                 if (!response.success) {
@@ -46,78 +67,83 @@ const AddInvoice = () => {
         }
     }, []);
 
-    const paymentGateways = [
-        "Stripe",
-        "PayPal",
-        "Razorpay",
-        "Square",
-        "Bank Transfer",
-        "Cash",
-        "Check",
-    ];
+    useEffect(() => {
+        const calculate = () => {
+            return items.reduce((acc: number, curr) => {
+                return acc + curr.total;
+            }, 0);
+        };
+
+        setGrandTotal(calculate());
+    }, [updateGrandTotal]);
 
     const submitForm = async (
-            companyName: string,
-            currency: string,
-            email: string,
-            phone: number,
-            panNumber: string
-        ) => {
-            try {
-                const response = await ClientService.addClient(
-                    companyName,
-                    currency,
-                    email,
-                    phone,
-                    panNumber
-                );
-    
-                console.log("response", response);
-                if (!response.success) {
-                    toastError(response.message);
-                } else {
-                    alert("success");
-                    localStorage.setItem("token", response.token);
-                    // dispatch(signInUser(response.user));
-                    navigate("/dashboard");
-                }
-            } catch (error) {
-                console.log("ERROR: ", error);
+        companyName: string,
+        companyId: string,
+        dueDate: string,
+        notes: string,
+        paymentGateway: string
+    ) => {
+        try {
+            const response = await InvoiceService.addInvoice(
+                companyName,
+                companyId,
+                dueDate,
+                items,
+                notes,
+                paymentGateway
+            );
+
+            // console.log("response", response);
+            if (!response.success) {
+                toastError(response.message);
+            } else {
+                navigate("/invoices");
             }
-        };
-    
-        const { values, touched, errors, handleBlur, handleChange, handleSubmit } =
-            addNewInvoiceValidation(submitForm);
+        } catch (error) {
+            console.log("ERROR: ", error);
+        }
+    };
 
-    // const addItem = () => {
-    //     setFormData(prev => ({
-    //         ...prev,
-    //         items: [...prev.items, { details: '', quantity: 1, rate: 0, total: 0 }]
-    //     }));
-    // };
+    const {
+        values,
+        touched,
+        errors,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        setFieldValue,
+    } = addNewInvoiceValidation(submitForm);
 
-    // const removeItem = (index) => {
-    //     if (formData.items.length > 1) {
-    //         const newItems = formData.items.filter((_, i) => i !== index);
-    //         setFormData(prev => ({
-    //             ...prev,
-    //             items: newItems
-    //         }));
-    //     }
-    // };
+    const addItem = (): void => {
+        const lastItem = items[items.length - 1];
 
-    // const calculateGrandTotal = () => {
-    //     return formData.items.reduce((sum, item) => sum + (item.total || 0), 0);
-    // };
+        if (
+            lastItem.details.trim() === "" ||
+            isNaN(lastItem.quantity) ||
+            lastItem.quantity <= 0 ||
+            isNaN(lastItem.rate) ||
+            lastItem.rate <= 0
+        ) {
+            toastError("Please fill all fields correctly before adding a new item.");
+            return;
+        }
 
+        setItems((prev) => [
+            ...prev,
+            { details: "", quantity: 0, rate: 0, total: 0 },
+        ]);
+    };
 
-    // companyName,
-    //         companyId,
-    //         invoiceNumber,
-    //         dueDate,
-    //         items,
-    //         notes,
-    //         patmentGateway
+    const removeItem = (index: number): void => {
+        if (items.length === 1) {
+            toastError("At least one item is required.");
+            return;
+        }
+
+        const newItems = items.filter((_, i) => i !== index);
+        setItems(newItems);
+    };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 p-6">
@@ -151,7 +177,7 @@ const AddInvoice = () => {
                         </div>
                     </div>
 
-                    <div className="space-y-8">
+                    <form className="space-y-8" onSubmit={handleSubmit}>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label className="block text-sm font-medium text-gray-300 mb-3">
@@ -162,7 +188,27 @@ const AddInvoice = () => {
                                         <Building2 className="w-5 h-5 text-gray-400" />
                                     </div>
                                     <select
-                                        className={`w-full pl-12 pr-4 py-4 bg-white/5 border rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300 appearance-none cursor-pointer`}
+                                        name="companyId"
+                                        value={values.companyId}
+                                        onChange={(e) => {
+                                            const selectedId = e.target.value;
+                                            const selectedCompany = clients.find(
+                                                (c) => c._id === selectedId
+                                            );
+
+                                            handleChange(e);
+
+                                            if (selectedCompany) {
+                                                setFieldValue(
+                                                    "companyName",
+                                                    selectedCompany.companyName
+                                                );
+                                            } else {
+                                                setFieldValue("companyName", "");
+                                            }
+                                        }}
+                                        onBlur={handleBlur}
+                                        className="w-full pl-12 pr-4 py-4 bg-white/5 border rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300 appearance-none cursor-pointer"
                                     >
                                         <option value="" className="bg-gray-800">
                                             Select company
@@ -178,6 +224,11 @@ const AddInvoice = () => {
                                         ))}
                                     </select>
                                 </div>
+                                {touched.companyName && errors.companyName && (
+                                    <div className="text-red-500 text-center">
+                                        {errors.companyName}
+                                    </div>
+                                )}
                             </div>
 
                             <div>
@@ -190,85 +241,164 @@ const AddInvoice = () => {
                                     </div>
                                     <input
                                         type="date"
+                                        name="dueDate"
+                                        onChange={handleChange}
+                                        value={values.dueDate}
+                                        onBlur={handleBlur}
                                         className={`w-full pl-12 pr-4 py-4 bg-white/5 border rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300  }`}
                                     />
                                 </div>
+                                {touched.dueDate && errors.dueDate && (
+                                    <div className="text-red-500 text-center">
+                                        {errors.dueDate}
+                                    </div>
+                                )}
                             </div>
                         </div>
 
+                        <div className="mt-4">
+                            <button
+                                type="button"
+                                onClick={addItem}
+                                className="w-full md:w-auto px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-200"
+                            >
+                                + Add Item
+                            </button>
+                        </div>
+
                         <div>
-                            <div className="flex items-center justify-between mb-6">
-                                <h3 className="text-xl font-bold text-white">Invoice Items</h3>
-                                <button
-                                    // onClick={addItem}
-                                    className="flex items-center space-x-2 bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-500 hover:to-emerald-600 text-white px-4 py-2 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-                                >
-                                    <Plus className="w-4 h-4" />
-                                    <span>Add Item</span>
-                                </button>
-                            </div>
-
                             <div className="space-y-4">
-                                <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
-                                        <div className="md:col-span-5">
-                                            <label className="block text-sm font-medium text-gray-300 mb-2">
-                                                Description
-                                            </label>
-                                            <input
-                                                type="text"
-                                                className={`w-full px-4 py-3 bg-white/5 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300`}
-                                                placeholder="Service or product description"
-                                            />
-                                        </div>
+                                {items.map((item, index: number) => (
+                                    <div
+                                        key={index}
+                                        className="bg-white/5 border border-white/10 rounded-2xl p-6"
+                                    >
+                                        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+                                            <div className="md:col-span-5">
+                                                <label className="block text-sm font-medium text-gray-300 mb-2">
+                                                    Details
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    onChange={(e) => {
+                                                        const value = e.target.value;
+                                                        const newItems = [...items];
+                                                        newItems[index].details = value;
+                                                        setItems(newItems);
 
-                                        <div className="md:col-span-2">
-                                            <label className="block text-sm font-medium text-gray-300 mb-2">
-                                                Qty
-                                            </label>
-                                            <input
-                                                type="number"
-                                                min="0"
-                                                step="0.01"
-                                                className={`w-full px-4 py-3 bg-white/5 border rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300`}
-                                                placeholder="1"
-                                            />
-                                        </div>
-
-                                        <div className="md:col-span-2">
-                                            <label className="block text-sm font-medium text-gray-300 mb-2">
-                                                Rate
-                                            </label>
-                                            <input
-                                                type="number"
-                                                min="0"
-                                                step="0.01"
-                                                className={`w-full px-4 py-3 bg-white/5 border rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300 `}
-                                                placeholder="4000"
-                                            />
-                                        </div>
-
-                                        <div className="md:col-span-2">
-                                            <label className="block text-sm font-medium text-gray-300 mb-2">
-                                                Total
-                                            </label>
-                                            <div className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white font-semibold">
-                                                {4000}
+                                                        if (value.length < 10 || value.length > 30) {
+                                                            newItems[index].detailsError =
+                                                                "Details must be 10 to 30 characters";
+                                                        } else {
+                                                            newItems[index].detailsError = "";
+                                                        }
+                                                        setItems([...newItems]);
+                                                    }}
+                                                    value={items[index].details}
+                                                    className="w-full px-4 py-3 bg-white/5 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300"
+                                                    placeholder="Service or product description"
+                                                    minLength={10}
+                                                />
+                                                {items[index].detailsError && (
+                                                    <div className="text-xs text-red-500 mt-1">
+                                                        {items[index].detailsError}
+                                                    </div>
+                                                )}
                                             </div>
-                                        </div>
 
-                                        <div className="md:col-span-1">
-                                            {/* {formData.items.length > 1 && (
+                                            <p className="hidden">{item.details}</p>
+
+                                            <div className="md:col-span-2">
+                                                <label className="block text-sm font-medium text-gray-300 mb-2">
+                                                    Qty
+                                                </label>
+                                                <input
+                                                    type="number"
+                                                    onChange={(e) => {
+                                                        const value = parseFloat(e.target.value);
+                                                        const newItems = [...items];
+                                                        newItems[index].quantity = value;
+                                                        newItems[index].total =
+                                                            value * newItems[index].rate;
+
+                                                        if (value < 1 || value > 5) {
+                                                            newItems[index].quantityError =
+                                                                "Quantity must be between 1 and 5";
+                                                        } else {
+                                                            newItems[index].quantityError = "";
+                                                        }
+                                                        setItems([...newItems]);
+                                                    }}
+                                                    value={items[index].quantity}
+                                                    className="w-full px-4 py-3 bg-white/5 border rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300"
+                                                    placeholder="1"
+                                                />
+                                                {items[index].quantityError && (
+                                                    <div className="text-xs text-red-500 mt-1">
+                                                        {items[index].quantityError}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div className="md:col-span-2">
+                                                <label className="block text-sm font-medium text-gray-300 mb-2">
+                                                    Rate
+                                                </label>
+                                                <input
+                                                    type="number"
+                                                    onChange={(e) => {
+                                                        const value = parseFloat(e.target.value);
+                                                        const newItems = [...items];
+                                                        newItems[index].rate = value;
+
+                                                        newItems[index].total =
+                                                            value * newItems[index].quantity;
+                                                        setUpdateGrandTotal((prev) => !prev);
+
+                                                        if (value < 100 || value > 50000) {
+                                                            newItems[index].rateError =
+                                                                "Rate must be between ₹100 and ₹50,000";
+                                                        } else {
+                                                            newItems[index].rateError = "";
+                                                        }
+                                                        setItems([...newItems]);
+                                                    }}
+                                                    value={items[index].rate}
+                                                    min="0"
+                                                    step="0.01"
+                                                    className="w-full px-4 py-3 bg-white/5 border rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300"
+                                                    placeholder="4000"
+                                                />
+                                                {items[index].rateError && (
+                                                    <div className="text-xs text-red-500 mt-1">
+                                                        {items[index].rateError}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div className="md:col-span-2">
+                                                <label className="block text-sm font-medium text-gray-300 mb-2">
+                                                    Total
+                                                </label>
+                                                <div className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white font-semibold">
+                                                    <div>{items[index].total?.toFixed(2) || "0.00"}</div>
+                                                </div>
+                                            </div>
+
+                                            <div className="md:col-span-1">
+                                                {items.length > 1 && (
                                                     <button
+                                                        type="button"
                                                         onClick={() => removeItem(index)}
                                                         className="w-full h-12 bg-red-600/20 hover:bg-red-600/30 text-red-400 hover:text-red-300 rounded-xl transition-all duration-200 flex items-center justify-center"
                                                     >
                                                         <Trash2 className="w-4 h-4" />
                                                     </button>
-                                                )} */}
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                ))}
                             </div>
 
                             <div
@@ -277,9 +407,8 @@ const AddInvoice = () => {
                             >
                                 <div className="flex justify-between items-center">
                                     <span className="text-xl font-bold text-white">
-                                        Grand Total:
+                                        Grand Total: {grandTotal}
                                     </span>
-                                    {/* <span className="text-2xl font-bold text-blue-400">${calculateGrandTotal().toFixed(2)}</span> */}
                                 </div>
                             </div>
                         </div>
@@ -287,12 +416,20 @@ const AddInvoice = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label className="block text-sm font-medium text-gray-300 mb-3">
-                                    Notes (Optional)
+                                    Notes
                                 </label>
                                 <textarea
+                                    typeof="text"
+                                    name="notes"
+                                    onChange={handleChange}
+                                    value={values.notes}
+                                    onBlur={handleBlur}
                                     className="w-full px-4 py-4 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300 resize-none"
                                     placeholder="Additional notes or terms..."
                                 />
+                                {touched.notes && errors.notes && (
+                                    <div className="text-red-500 text-center">{errors.notes}</div>
+                                )}
                             </div>
 
                             <div className="space-y-6">
@@ -305,14 +442,18 @@ const AddInvoice = () => {
                                             <CreditCard className="w-5 h-5 text-gray-400" />
                                         </div>
                                         <select
+                                            name="paymentGateway"
+                                            onChange={handleChange}
+                                            value={values.paymentGateway}
+                                            onBlur={handleBlur}
                                             className={`w-full pl-12 pr-4 py-4 bg-white/5 border rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300 appearance-none cursor-pointer`}
                                         >
                                             <option value="" className="bg-gray-800">
                                                 Select payment method
                                             </option>
-                                            {paymentGateways.map((gateway) => (
+                                            {paymentGateways.map((gateway: string, index: number) => (
                                                 <option
-                                                    key={gateway}
+                                                    key={index}
                                                     value={gateway}
                                                     className="bg-gray-800"
                                                 >
@@ -321,19 +462,18 @@ const AddInvoice = () => {
                                             ))}
                                         </select>
                                     </div>
+                                    {touched.paymentGateway && errors.paymentGateway && (
+                                        <div className="text-red-500 text-center">
+                                            {errors.paymentGateway}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
 
                         <div className="flex items-center justify-end space-x-4 pt-8 border-t border-white/20">
                             <button
-                                type="button"
-                                className="px-8 py-3 bg-white/10 hover:bg-white/20 text-white rounded-2xl transition-all duration-300 border border-white/20 hover:border-white/30"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                type="button"
+                                type="submit"
                                 className="flex items-center space-x-2 px-10 py-3 bg-gradient-to-r
                                  from-gray-600 to-stone-700 hover:from-gray-500 hover:to-purple-600 text-white rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 border border-white/20 hover:border-white/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                             >
@@ -343,7 +483,7 @@ const AddInvoice = () => {
                                 </>
                             </button>
                         </div>
-                    </div>
+                    </form>
 
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-purple-700/5 rounded-3xl pointer-events-none"></div>
                 </div>

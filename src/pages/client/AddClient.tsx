@@ -31,13 +31,10 @@ const AddClient = () => {
                 panNumber
             );
 
-            console.log("response", response);
+            // console.log("response", response);
             if (!response.success) {
                 toastError(response.message);
-            } else {
-                alert("success");
-                localStorage.setItem("token", response.token);
-                // dispatch(signInUser(response.user));
+            } else { 
                 navigate("/dashboard");
             }
         } catch (error) {
