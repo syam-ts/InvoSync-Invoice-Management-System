@@ -56,9 +56,10 @@ export const UserService = {
 
     getMyClients: async () => {
         try {
-            const token = localStorage.getItem("token")
+            const token = localStorage.getItem("token");
             const { data } = await axios.get(
-                `${config.backend_url}/api/v1/user/my-clients`,   {
+                `${config.backend_url}/api/v1/user/my-clients`,
+                {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -76,9 +77,10 @@ export const UserService = {
 
     getAllInvoices: async (clientId: string | undefined) => {
         try {
-            const token = localStorage.getItem("token")
+            const token = localStorage.getItem("token");
             const { data } = await axios.get(
-                `${config.backend_url}/api/v1/client/all-invoices/${clientId}`,   {
+                `${config.backend_url}/api/v1/client/all-invoices/${clientId}`,
+                {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -96,9 +98,46 @@ export const UserService = {
 
     getProfile: async () => {
         try {
-            const token = localStorage.getItem("token")
+            const token = localStorage.getItem("token");
             const { data } = await axios.get(
-                `${config.backend_url}/api/v1/user/profile`,   {
+                `${config.backend_url}/api/v1/user/profile`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            return data;
+        } catch (error: unknown) {
+            const err = error as { response: { data: { success: boolean } } };
+            if (!err.response.data.success) {
+                return err.response.data;
+            }
+        }
+    },
+
+    updateProfile: async (
+        fullName: string,
+        mobile: number,
+        gender: string,
+        language: string,
+        country: string,
+        state: string
+    ) => {
+        try {
+            const token = localStorage.getItem("token");
+            const { data } = await axios.put(
+                `${config.backend_url}/api/v1/user/update`,
+                {
+                    fullName,
+                    mobile,
+                    gender,
+                    country,
+                    state,
+                    language,
+                },
+                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
