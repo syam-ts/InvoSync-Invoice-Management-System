@@ -8,6 +8,7 @@ import InvoiceCard from "../pages/invoice/Invoices.tsx";
 import AddClient from "../pages/client/AddClient.tsx";
 import AddInvoice from "../pages/invoice/AddInvoice.tsx";
 import UserProfile from "../pages/user/Profile.tsx";
+import UserProfileEdit from "../pages/user/ProfileEdit.tsx";
 
 export const router = createBrowserRouter([ 
     {
@@ -45,6 +46,10 @@ export const router = createBrowserRouter([
             {
                 path: '/profile',
                 element: <UserProfile />
+            },
+            {
+                path: '/profile-edit',
+                element: <UserProfileEdit/>
             }
         ]
     }
