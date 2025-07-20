@@ -44,7 +44,7 @@ const Dashboard = () => {
     return (
         <div className="w-full h-screen">
             <div>
-                  <h1 className="text-4xl text-center text-white pt-20 font-bold">Client Cards</h1>
+                  <h1 className="text-4xl text-center text-white pt-20 font-bold">Clients</h1>
             </div>
             {
                 clients.length > 1 && <ClientCard clients={clients} />

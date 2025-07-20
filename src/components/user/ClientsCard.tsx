@@ -29,7 +29,7 @@ const ClientCard = ({ clients }: any) => {
     };
 
     return (
-        <div className="min-h-screen pt-22  ">
+        <div className="min-h-screen pt-22  "> 
             <div className="relative max-w-7xl mx-auto px-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {clients.map((client: any) => (

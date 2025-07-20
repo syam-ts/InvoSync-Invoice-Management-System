@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     Receipt,
     Building2,
@@ -21,14 +21,13 @@ const InvoiceCard = ({ invoices }: any) => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 p-6">
+        <div className="min-h-screen pt-22 bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 p-6">
             <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/5 rounded-full blur-3xl"></div>
                 <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gray-400/10 rounded-full blur-3xl"></div>
             </div>
 
-            <div className="relative max-w-7xl mx-auto">
-                <h1 className="text-3xl font-bold text-white mb-8">Invoice Cards</h1>
+            <div className="relative max-w-7xl mx-auto"> 
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                     {invoices.map((invoice: any) => {

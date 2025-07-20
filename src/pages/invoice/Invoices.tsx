@@ -4,8 +4,20 @@ import { UserService } from "../../services/api/userServices";
 import { toastError } from "../../utils/sonner/toastError";
 import InvoiceCard from "../../components/invoice/InvoiceCard";
 
+interface IInvoice {
+    company: string;
+    invoiceNumber: number;
+    invoiceDate: string;
+    dueDate: string;
+    items: [];
+    total: number;
+    notes: string;
+    patmentGateway: string;
+    paid: boolean;
+}
+
 const Invoices: React.FC = () => {
-    const [invoices, setInvoices] = useState([
+    const [invoices, setInvoices] = useState<IInvoice[]>([
         {
             company: "",
             invoiceNumber: 0,
@@ -42,13 +54,15 @@ const Invoices: React.FC = () => {
         <div className="w-full h-screen">
             <div>
                 <h1 className="text-4xl text-center text-white pt-20 font-bold">
-                    Client Cards
+                    Invoices
                 </h1>
-            </div> 
+            </div>
             {invoices.length > 0 ? (
                 <InvoiceCard invoices={invoices} />
             ) : (
-                <p className="text-xl text-white mx-auto text-center py-44">No Invoices Found</p>
+                <p className="text-xl text-white mx-auto text-center py-44">
+                    No Invoices Found
+                </p>
             )}
         </div>
     );
