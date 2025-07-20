@@ -8,7 +8,7 @@ const Profile = () => {
 
   return (
     <div className="flex justify-center items-center text-center pt-20 pb-10 from-gray-900 via-slate-800 to-gray-900">
-      <div className="w-full max-w-2xl shadow-2xl rounded-2xl p-10 border border-gray-700 from-gray-900 via-slate-800 to-gray-900 text-white">
+      <div className="w-full max-w-4xl bg-white/10 h-[50rem] shadow-2xl rounded-2xl p-10 border border-gray-700 from-gray-900 via-slate-800 to-gray-900 text-white">
         <div className="flex flex-col items-center mb-10">
           <p
             
@@ -42,7 +42,7 @@ interface ProfileFieldProps {
 }
 
 const ProfileField: React.FC<ProfileFieldProps> = ({ icon: Icon, label, value }) => (
-  <div className="flex items-center from-gray-900 via-slate-800 to-gray-900 p-4 rounded-xl border border-white/9">
+  <div className="flex items-center bg-white/5 p-4 rounded-xl border border-white/9">
     <Icon className="text-white w-5 h-5 mr-4" />
     <div>
       <p className="text-sm text-gray-400">{label}</p>

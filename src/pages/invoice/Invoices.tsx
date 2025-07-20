@@ -30,7 +30,8 @@ const Invoices: React.FC = () => {
             paid: false,
         },
     ]);
-    const { clientId } = useParams<{ clientId: string }>();
+  const [paidUpdate, setPaidUpdate] = useState<boolean>(false);
+      const { clientId } = useParams<{ clientId: string }>();
 
     useEffect(() => {
         try {
@@ -49,7 +50,7 @@ const Invoices: React.FC = () => {
         } catch (error) {
             console.log('ERROR: ',error)
          }
-    }, []);
+    }, [paidUpdate]);
 
     console.log("INVOE: ", invoices);
     return (
@@ -60,7 +61,7 @@ const Invoices: React.FC = () => {
                 </h1>
             </div>
             {invoices.length > 0 ? (
-                <InvoiceCard invoices={invoices} />
+                <InvoiceCard invoices={invoices} updatePaidFuntion={setPaidUpdate} />
             ) : (
                 <p className="text-xl text-white mx-auto text-center py-44">
                     No Invoices Found

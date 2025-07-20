@@ -38,7 +38,7 @@ const Dashboard = () => {
         <div className="w-full h-screen">
             <div>
                 <h1 className="text-4xl text-center text-white pt-20 font-bold">
-                    Clients
+                    Dashboard
                 </h1>
             </div>
             {clients.length > 1 && <ClientCard clients={clients} />}

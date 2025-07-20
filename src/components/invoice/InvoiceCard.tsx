@@ -11,18 +11,45 @@ import {
     Edit,
     Trash2,
     Eye,
+    Drone,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { InvoiceService } from "../../services/api/invoiceService";
+import { toastError } from "../../utils/sonner/toastError";
+import { Toaster } from "sonner";
+import type { IInvoice } from "../../helper/interfaces/IInvoice";
 
-const InvoiceCard = ({ invoices }: any) => {
+const InvoiceCard = ({ invoices, updatePaidFuntion }: {invoices: IInvoice, updatePaidFuntion: any}) => {
     const [showDropdown, setShowDropdown] = useState(null);
+  
 
     const handleDropdownToggle = (invoiceId: any) => {
         setShowDropdown(showDropdown === invoiceId ? null : invoiceId);
     };
 
+    const markAsPaidFunction = async (invoiceId: string) => {
+         try {
+              const response = await InvoiceService.markAsPaid(
+                invoiceId
+              );
+        
+              // console.log("response", response);
+              if (!response.success) {
+                toastError(response.message);
+              } else {
+                toastError(response.message)
+                updatePaidFuntion((prev: boolean) => !prev);
+                setShowDropdown(null)
+               
+              }
+            } catch (error) {
+              console.log("ERROR: ", error);
+            }
+    }
+
     return (
         <div className="min-h-screen pt-22 bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 p-6">
+            <Toaster />
             <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/5 rounded-full blur-3xl"></div>
                 <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gray-400/10 rounded-full blur-3xl"></div>
@@ -65,18 +92,14 @@ const InvoiceCard = ({ invoices }: any) => {
                                                     <span>View</span>
                                                     </Link>
                                                 </button>
-                                                <button className="w-full px-4 py-2 text-left text-sm text-white hover:bg-white/10 transition-colors flex items-center space-x-2">
-                                                    <Download className="w-4 h-4" />
-                                                    <span>Download</span>
+                                             
+                                                <button 
+                                                onClick={() => markAsPaidFunction(invoice._id)}
+                                                className="w-full px-4 py-2 text-left cursor-pointer text-sm text-blue-300 hover:bg-red-500/10 transition-colors flex items-center space-x-2">
+                                                    <Drone className="w-4 h-4" />
+                                                    <span>Mark as Paid</span>
                                                 </button>
-                                                <button className="w-full px-4 py-2 text-left text-sm text-white hover:bg-white/10 transition-colors flex items-center space-x-2">
-                                                    <Send className="w-4 h-4" />
-                                                    <span>Send</span>
-                                                </button>
-                                                <button className="w-full px-4 py-2 text-left text-sm text-white hover:bg-white/10 transition-colors flex items-center space-x-2">
-                                                    <Edit className="w-4 h-4" />
-                                                    <span>Edit</span>
-                                                </button>
+                                             
                                                 <button className="w-full px-4 py-2 text-left text-sm text-red-300 hover:bg-red-500/10 transition-colors flex items-center space-x-2">
                                                     <Trash2 className="w-4 h-4" />
                                                     <span>Delete</span>
@@ -92,9 +115,24 @@ const InvoiceCard = ({ invoices }: any) => {
                                             <Building2 className="w-4 h-4 text-blue-400" />
                                         </div>
                                         <div>
-                                            <p className="text-sm font-medium text-white">
-                                                {invoice.company.name}
-                                            </p>
+                                            <div className="flex gap-36 text-sm font-medium text-white">
+                                                <div>
+                                                    {invoice.company.name}
+                                                </div>
+                                                <div className="flex">
+                                                 {
+                                                       invoice.paid ? (
+                                                        <span className="text-green-600">
+                                                            Paid
+                                                        </span>
+                                                    ) : (
+                                                        <span className="text-red-600">
+                                                            Unpaid
+                                                        </span>
+                                                    )
+                                                }
+                                                 </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
