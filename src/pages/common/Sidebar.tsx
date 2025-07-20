@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { menuItems } from "../../utils/constants/sidebarMenuItems";
+import { useDispatch, useSelector } from "react-redux";
+import { signOutUser } from "../../redux/slices/userSlice";
 import {
   FileText,
   User,
@@ -7,20 +10,28 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { menuItems } from "../../utils/constants/sidebarMenuItems";
-import { useSelector } from "react-redux";
 
 const Sidebar = () => {
-
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const [activeItem, setActiveItem] = useState<string>("dashboard");
 
-  const user = useSelector((state: any) => state.currentUser)
+  const user = useSelector((state: any) => state.currentUser);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleItemClick = (itemId: string) => {
     setActiveItem(itemId);
   };
- 
+
+  const handleLogout = () => {
+    try {
+      dispatch(signOutUser());
+      localStorage.removeItem("token");
+      navigate("/login");
+    } catch (error) {
+      console.log("ERROR: ", error);
+    }
+  };
 
   return (
     <div className="h-screen max-w-[21rem] p-4">
@@ -43,7 +54,7 @@ const Sidebar = () => {
 
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-all duration-200 text-gray-300 hover:text-white"
+            className="w-8 h-8 bg-white/10 cursor-pointer hover:bg-white/20 rounded-lg flex items-center justify-center transition-all duration-200 text-gray-300 hover:text-white"
           >
             {isCollapsed ? (
               <ChevronRight className="w-4 h-4" />
@@ -63,7 +74,7 @@ const Sidebar = () => {
                 <button
                   key={item.id}
                   onClick={() => handleItemClick(item.id)}
-                  className={`w-full flex items-center space-x-3 p-3 rounded-xl transition-all duration-200 group ${isActive
+                  className={`w-full flex items-center cursor-pointer space-x-3 p-3 rounded-xl transition-all duration-200 group ${isActive
                       ? "bg-gradient-to-r from-gray-600/80 to-slate-700/80 text-white shadow-lg"
                       : "text-gray-300 hover:text-white hover:bg-white/10"
                     }`}
@@ -88,8 +99,8 @@ const Sidebar = () => {
 
         <div className="absolute bottom-4 left-4 right-4">
           <button
-            onClick={() => handleItemClick("logout")}
-            className="w-full flex items-center space-x-3 p-3 rounded-xl transition-all duration-200 group text-red-300 hover:text-red-200 hover:bg-red-500/10"
+            onClick={handleLogout}
+            className="w-full flex items-center cursor-pointer space-x-3 p-3 rounded-xl transition-all duration-200 group text-red-300 hover:text-red-200 hover:bg-red-500/10"
           >
             <div className="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200 bg-red-500/10 group-hover:bg-red-500/20">
               <LogOut className="w-5 h-5" />
@@ -107,7 +118,9 @@ const Sidebar = () => {
               </div>
               <div>
                 <Link to="/profile">
-                  <p className="text-white text-sm font-medium">{user.fullName}</p>
+                  <p className="text-white text-sm font-medium">
+                    {user?.fullName}
+                  </p>
                   <p className="text-gray-400 text-xs">Freelancer</p>
                 </Link>
               </div>
@@ -117,7 +130,6 @@ const Sidebar = () => {
       </div>
     </div>
   );
-}
-
+};
 
 export default Sidebar;

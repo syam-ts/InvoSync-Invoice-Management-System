@@ -69,7 +69,7 @@ const SignupPage = () => {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-slate-500/10 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="relative w-full max-w-md">
+      <div className="relative w-full max-w-xl">
         <div className="text-center mb-4">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-gray-600 to-slate-700 rounded-2xl mb-4 shadow-2xl">
             <FileText className="w-8 h-8 text-white" />
