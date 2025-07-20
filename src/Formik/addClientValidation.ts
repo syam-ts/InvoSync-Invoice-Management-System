@@ -1,14 +1,7 @@
 import { useFormik } from "formik";
+import type { IClients } from "../helper/interfaces/IClient";
 
-interface IClient {
-    companyName: string;
-    currency: string;
-    email: string;
-    phone: number;
-    panNumber: string;
-}
-
-const initialValues: IClient = {
+const initialValues: IClients = {
     companyName: "",
     currency: "",
     email: "",
@@ -49,7 +42,7 @@ export const addNewClientValidation = (submitForm: any) => {
                 values.phone.toString().length < 9 ||
                 values.phone.toString().length > 10
             ) {
-                errors.phone = "Phone number should be valid";
+                errors.phone = "Phone number should be valid (10 digits)";
             }
 
             if (!values.panNumber) {

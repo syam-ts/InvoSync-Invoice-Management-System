@@ -2,14 +2,9 @@ import { useEffect, useState } from "react";
 import { UserService } from "../../services/api/userServices";
 import { toastError } from "../../utils/sonner/toastError";
 import ClientCard from "../../components/user/ClientsCard";
+import type { IClients } from "../../helper/interfaces/IClient";
 
-interface IClients {
-    companyName: string;
-    currency: string;
-    email: string;
-    phone: number;
-    panNumber: string;
-}
+
 
 const Dashboard = () => {
     const [clients, setClients] = useState<IClients[]>([

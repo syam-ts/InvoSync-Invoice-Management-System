@@ -187,11 +187,12 @@ const AddClient = () => {
                                     </div>
                                     <input
                                         name="phone"
+                                        type="number"
                                         onChange={handleChange}
-                                        value={values.phone}
+                                        value={values.phone || ''}
                                         onBlur={handleBlur}
                                         className={`w-full pl-12 pr-4 py-4 bg-white/5 border rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300`}
-                                        placeholder="(555) 123-4567"
+                                        placeholder="86970456718"
                                         maxLength={10}
                                     />
                                 </div>
