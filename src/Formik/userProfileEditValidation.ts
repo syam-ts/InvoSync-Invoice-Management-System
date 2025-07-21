@@ -1,4 +1,4 @@
-import { useFormik } from "formik";
+import { useFormik, type FormikErrors } from "formik";
 import { useSelector } from "react-redux";
 
 export const userProfileEditValidation = (submitForm: any) => {
@@ -8,7 +8,7 @@ export const userProfileEditValidation = (submitForm: any) => {
 
     return useFormik({
         initialValues: {
-            fullName: user.fullName,
+            fullName: user.fullName ,
             mobile: user.mobile,
             gender: user.gender,
             language: user.language,
@@ -17,7 +17,7 @@ export const userProfileEditValidation = (submitForm: any) => {
         },
 
         validate: (values) => {
-            const errors: any = {};
+             const errors: FormikErrors<typeof values> = {};
 
             if (!values.fullName) {
                 errors.fullName = "Full Name Required";

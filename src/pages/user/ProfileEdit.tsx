@@ -48,7 +48,7 @@ const UserProfileEdit = () => {
       // console.log("response", response);
       if (!response.success) {
         toastError(response.message);
-      } else { 
+      } else {
         dispatch(signInUser(response.user));
         navigate("/profile");
       }
@@ -124,9 +124,12 @@ const UserProfileEdit = () => {
                         placeholder="Enter your full name"
                       />
                     </div>
-                    {touched.fullName && errors.fullName && (
-                  <div className="text-red-500 text-center">{errors.fullName}</div>
-                )}
+                    {touched.fullName &&
+                      typeof errors.fullName === "string" && (
+                        <div className="text-red-500 text-center">
+                          {errors.fullName}
+                        </div>
+                      )}
                   </div>
 
                   <div>
@@ -147,9 +150,12 @@ const UserProfileEdit = () => {
                         placeholder="98765 43210"
                       />
                     </div>
-                    {touched.mobile && errors.mobile && (
-                  <div className="text-red-500 text-center">{errors.mobile}</div>
-                )}
+
+                    {touched.mobile && typeof errors.mobile === "string" && (
+                      <div className="text-red-500 text-center">
+                        {errors.mobile}
+                      </div>
+                    )}
                   </div>
 
                   <div>
@@ -180,9 +186,12 @@ const UserProfileEdit = () => {
                           </option>
                         ))}
                       </select>
-                      {touched.gender && errors.gender && (
-                  <div className="text-red-500 text-center">{errors.gender}</div>
-                )}
+
+                      {touched.gender && typeof errors.gender === "string" && (
+                        <div className="text-red-500 text-center">
+                          {errors.gender}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -219,9 +228,12 @@ const UserProfileEdit = () => {
                         ))}
                       </select>
                     </div>
-                    {touched.language && errors.language && (
-                  <div className="text-red-500 text-center">{errors.language}</div>
-                )}
+                    {touched.language &&
+                      typeof errors.language === "string" && (
+                        <div className="text-red-500 text-center">
+                          {errors.language}
+                        </div>
+                      )}
                   </div>
                 </div>
               </div>
@@ -262,9 +274,12 @@ const UserProfileEdit = () => {
                         ))}
                       </select>
                     </div>
-                    {touched.country && errors.country && (
-                  <div className="text-red-500 text-center">{errors.country}</div>
-                )}
+
+                    {touched.country && typeof errors.country === "string" && (
+                      <div className="text-red-500 text-center">
+                        {errors.country}
+                      </div>
+                    )}
                   </div>
 
                   <div>
@@ -278,12 +293,14 @@ const UserProfileEdit = () => {
                       value={values.state}
                       onBlur={handleBlur}
                       className={`w-full pl-12 pr-4 py-4 bg-white/5 border rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300 `}
-                    placeholder="Enter your State"
+                      placeholder="Enter your State"
                     />
                   </div>
-                  {touched.state && errors.state && (
-                  <div className="text-red-500 text-center">{errors.state}</div>
-                )}
+                  {touched.state && typeof errors.state === "string" && (
+                    <div className="text-red-500 text-center">
+                      {errors.state}
+                    </div>
+                  )}
                 </div>
               </div>
 

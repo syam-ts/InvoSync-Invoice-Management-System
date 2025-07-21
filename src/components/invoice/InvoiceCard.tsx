@@ -1,25 +1,24 @@
 import { useState } from "react";
+import { Toaster } from "sonner";
+import { Link } from "react-router-dom";
+import { InvoiceService } from "../../services/api/invoiceService";
+import { toastError } from "../../utils/sonner/toastError";
 import {
     Receipt,
     Building2,
     Calendar,
     DollarSign,
     CreditCard,
-    MoreVertical,
-    Download,
-    Send,
-    Edit,
+    MoreVertical, 
     Trash2,
     Eye,
     Drone,
 } from "lucide-react";
-import { Link } from "react-router-dom";
-import { InvoiceService } from "../../services/api/invoiceService";
-import { toastError } from "../../utils/sonner/toastError";
-import { Toaster } from "sonner";
-import type { IInvoice } from "../../helper/interfaces/IInvoice";
 
-const InvoiceCard = ({ invoices, updatePaidFuntion }: {invoices: IInvoice, updatePaidFuntion: any}) => {
+
+
+
+const InvoiceCard = ({ invoices, updatePaidFuntion }: {invoices: any, updatePaidFuntion: any}) => {
     const [showDropdown, setShowDropdown] = useState(null);
   
 
