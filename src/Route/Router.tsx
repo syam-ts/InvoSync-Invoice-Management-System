@@ -10,15 +10,27 @@ import UserProfile from "../pages/user/Profile.tsx";
 import UserProfileEdit from "../pages/user/ProfileEdit.tsx";
 import ViewInvoice from "../pages/invoice/ViewInvoice.tsx";
 import GuestRoute from "./ProtectredRoute/GuestProtectedRoute.tsx";
-import NotAuthProtectedRoute from "./ProtectredRoute/NotAuthProtectedRoute.tsx"; 
+import NotAuthProtectedRoute from "./ProtectredRoute/NotAuthProtectedRoute.tsx";
 import Invoices from "../pages/invoice/Invoices.tsx";
+import { ROUTE } from "../utils/constants/route.ts";
+
+const { LOGIN, SIGNUP } = ROUTE;
+const {
+    DASHBOARD,
+    CLIENTS,
+    VIEW_ALL_INVOICES,
+    ADD_CLIENT,
+    ADD_INVOICE,
+    VIEW_INVOICE,
+} = ROUTE.APP;
+const { PROFILE, PROFILE_EDIT } = ROUTE.USER;
 
 export const router = createBrowserRouter([
     {
         element: <Layout />,
         children: [
             {
-                path: "/login",
+                path: LOGIN,
                 element: (
                     <GuestRoute>
                         <Login />
@@ -26,7 +38,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/signup",
+                path: SIGNUP,
                 element: (
                     <GuestRoute>
                         <Signup />
@@ -34,7 +46,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/dashboard",
+                path: DASHBOARD,
                 element: (
                     <NotAuthProtectedRoute>
                         <Dashboard />
@@ -42,7 +54,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/clients",
+                path: CLIENTS,
                 element: (
                     <NotAuthProtectedRoute>
                         <Clients />
@@ -50,7 +62,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/client/:clientId",
+                path: VIEW_ALL_INVOICES,
                 element: (
                     <NotAuthProtectedRoute>
                         <Invoices />
@@ -58,7 +70,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/add-client",
+                path: ADD_CLIENT,
                 element: (
                     <NotAuthProtectedRoute>
                         <AddClient />
@@ -66,7 +78,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/add-invoice",
+                path: ADD_INVOICE,
                 element: (
                     <NotAuthProtectedRoute>
                         <AddInvoice />
@@ -74,7 +86,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/profile",
+                path: PROFILE,
                 element: (
                     <NotAuthProtectedRoute>
                         <UserProfile />
@@ -82,7 +94,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/profile-edit",
+                path: PROFILE_EDIT,
                 element: (
                     <NotAuthProtectedRoute>
                         <UserProfileEdit />
@@ -90,7 +102,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/invoice/:invoiceId",
+                path: VIEW_INVOICE,
                 element: (
                     <NotAuthProtectedRoute>
                         <ViewInvoice />
