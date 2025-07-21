@@ -1,5 +1,6 @@
-import axios from "axios";
-import { config } from "../../utils/config";
+import { axiosInstanse } from "../../api/axios/axiosInstance";
+
+ 
 
 export const InvoiceService = {
     addInvoice: async (
@@ -11,23 +12,14 @@ export const InvoiceService = {
         paymentGateway: string
     ) => {
         try {
-            const token = localStorage.getItem("token");
-            const { data } = await axios.post(
-                `${config.backend_url}/api/v1/invoice/create`,
-                {
-                    companyName,
-                    companyId,
-                    dueDate,
-                    items,
-                    notes,
-                    paymentGateway,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+            const { data } = await axiosInstanse.post(`/api/v1/invoice/create`, {
+                companyName,
+                companyId,
+                dueDate,
+                items,
+                notes,
+                paymentGateway,
+            });
 
             return data;
         } catch (error: unknown) {
@@ -40,14 +32,8 @@ export const InvoiceService = {
 
     viewInvoice: async (invoiceId: string | undefined) => {
         try {
-            const token = localStorage.getItem("token");
-            const { data } = await axios.get(
-                `${config.backend_url}/api/v1/invoice/view/${invoiceId}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
+            const { data } = await axiosInstanse.get(
+                `/api/v1/invoice/view/${invoiceId}`
             );
 
             return data;
@@ -61,15 +47,9 @@ export const InvoiceService = {
 
     markAsPaid: async (invoiceId: string | undefined) => {
         try {
-            const token = localStorage.getItem("token");
-            const { data } = await axios.patch(
-                `${config.backend_url}/api/v1/invoice/paid/${invoiceId}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
+            const { data } = await axiosInstanse.patch(
+                `/api/v1/invoice/paid/${invoiceId}`,
+                {}
             );
 
             return data;

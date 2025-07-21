@@ -1,12 +1,17 @@
+ 
 import axios from "axios";
 import { config } from "../../utils/config";
+import { axiosInstanse } from "../../api/axios/axiosInstance";
 
 export const UserService = {
     loginUser: async (email: string, password: string) => {
         try {
             const { data } = await axios.post(
                 `${config.backend_url}/api/v1/user/login`,
-                { email, password }
+                { email, password },
+                {
+                    withCredentials: true,
+                }
             );
 
             return data;
@@ -56,15 +61,7 @@ export const UserService = {
 
     getMyClients: async () => {
         try {
-            const token = localStorage.getItem("token");
-            const { data } = await axios.get(
-                `${config.backend_url}/api/v1/user/my-clients`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+            const { data } = await axiosInstanse.get(`/api/v1/user/my-clients`);
 
             return data;
         } catch (error: unknown) {
@@ -77,14 +74,8 @@ export const UserService = {
 
     getAllInvoices: async (clientId: string | undefined) => {
         try {
-            const token = localStorage.getItem("token");
-            const { data } = await axios.get(
-                `${config.backend_url}/api/v1/client/all-invoices/${clientId}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
+            const { data } = await axiosInstanse.get(
+                `/api/v1/client/all-invoices/${clientId}`
             );
 
             return data;
@@ -98,15 +89,7 @@ export const UserService = {
 
     getProfile: async () => {
         try {
-            const token = localStorage.getItem("token");
-            const { data } = await axios.get(
-                `${config.backend_url}/api/v1/user/profile`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+            const { data } = await axiosInstanse.get(`/api/v1/user/profile`);
 
             return data;
         } catch (error: unknown) {
@@ -126,23 +109,14 @@ export const UserService = {
         state: string
     ) => {
         try {
-            const token = localStorage.getItem("token");    
-            const { data } = await axios.put(
-                `${config.backend_url}/api/v1/user/update`,
-                {
-                    fullName,
-                    mobile,
-                    gender,
-                    country,
-                    state,
-                    language,
-                },
-                 {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+            const { data } = await axiosInstanse.put(`/api/v1/user/update`, {
+                fullName,
+                mobile,
+                gender,
+                country,
+                state,
+                language,
+            });
 
             return data;
         } catch (error: unknown) {

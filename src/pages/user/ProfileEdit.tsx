@@ -48,8 +48,7 @@ const UserProfileEdit = () => {
       // console.log("response", response);
       if (!response.success) {
         toastError(response.message);
-      } else {
-        console.log("REPONSE USER: ", response.user);
+      } else { 
         dispatch(signInUser(response.user));
         navigate("/profile");
       }

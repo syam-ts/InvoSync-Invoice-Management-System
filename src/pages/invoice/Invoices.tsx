@@ -38,8 +38,7 @@ const Invoices: React.FC = () => {
             const getAllInvoicesFunction = async () => {
                 const response = await UserService.getAllInvoices(clientId);
 
-                console.log("REPSON: ", response.invoices);
-                if (!response.success) {
+                 if (!response.success) {
                     toastError(response.message);
                 } else {
                     setInvoices(response.invoices);
@@ -51,8 +50,7 @@ const Invoices: React.FC = () => {
             console.log('ERROR: ',error)
          }
     }, [paidUpdate]);
-
-    console.log("INVOE: ", invoices);
+ 
     return (
         <div className="w-full h-screen">
             <div>

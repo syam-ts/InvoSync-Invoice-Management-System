@@ -1,5 +1,4 @@
-import axios from "axios";
-import { config } from "../../utils/config";
+import {axiosInstanse} from "../../api/axios/axiosInstance";
 
 export const ClientService = {
     addClient: async (
@@ -10,22 +9,13 @@ export const ClientService = {
         panNumber: string
     ) => {
         try {
-            const token = localStorage.getItem("token");
-            const { data } = await axios.post(
-                `${config.backend_url}/api/v1/client/add`,
-                {
-                    companyName,
-                    currency,
-                    email,
-                    phone,
-                    panNumber,
-                },
-                {       
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+            const { data } = await axiosInstanse.post(`/api/v1/client/add`, {
+                companyName,
+                currency,
+                email,
+                phone,
+                panNumber,
+            });
 
             return data;
         } catch (error: unknown) {
