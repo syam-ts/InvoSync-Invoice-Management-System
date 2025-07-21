@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserService } from "../../services/api/userServices";
 import { toastError } from "../../utils/sonner/toastError";
 import { loginValidation } from "../../Formik/loginValidation";
+import { useDispatch } from "react-redux";
+import { signInUser } from "../../redux/slices/userSlice";
 import {
   Mail,
   Lock,
@@ -13,8 +15,6 @@ import {
   FileText,
   DollarSign,
 } from "lucide-react";
-import { useDispatch } from "react-redux";
-import { signInUser } from "../../redux/slices/userSlice";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -28,9 +28,8 @@ const LoginPage = () => {
       // console.log("response", response);
       if (!response.success) {
         toastError(response.message);
-      } else { 
-        console.log('REPONSE USER: ', response.user)
-        localStorage.setItem("token", response.token);
+      } else {  
+        localStorage.setItem("accessToken", response.accessToken);
           dispatch(signInUser(response.user));
          navigate("/dashboard");
       }
