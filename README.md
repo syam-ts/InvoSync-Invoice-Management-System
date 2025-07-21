@@ -12,7 +12,7 @@
   <li>⚛️ React.js (with TypeScript)</li>
   <li>⚡ Vite (build tool)</li>
   <li>🧠 Redux Toolkit (state management)</li>
-  <li>🌐 Axios (HTTP requests)</li>
+  <li>🌐 Axios (HTTP requests & interceptors)</li>
   <li>🎨 Tailwind CSS v4 (styling)</li>
   <li>✅ Formik (form validation)</li>
   <li>🔔 Sonner (toast notifications)</li>
