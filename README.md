@@ -18,7 +18,7 @@
   <li>🔔 Sonner (toast notifications)</li>
   <li>📄 html2canvas & html2pdf.js (PDF download)</li>
   <li>🐳 Docker (containerized deployment)</li>
-  <li>🐳 Docker (containerized deployment)</li>
+  <li>🚀 Github Action (for CI/CD pipeline)</li>
 </ul>
 
 <hr />
