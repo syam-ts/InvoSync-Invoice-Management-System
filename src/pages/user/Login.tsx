@@ -15,23 +15,29 @@ import {
   FileText,
   DollarSign,
 } from "lucide-react";
+import { Spinner } from "../../features/spinner/react-spinner";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [loadingSpinner, setLoadingSpinner] = useState<boolean>(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const submitForm = async (email: string, password: string): Promise<void> => {
     try {
+      setLoadingSpinner(true);
       const response = await UserService.loginUser(email, password);
 
       // console.log("response", response);
       if (!response.success) {
         toastError(response.message);
-      } else {  
+        setLoadingSpinner(false);
+      } else {
+        setLoadingSpinner(false);
+
         localStorage.setItem("accessToken", response.accessToken);
-          dispatch(signInUser(response.user));
-         navigate("/dashboard");
+        dispatch(signInUser(response.user));
+        navigate("/dashboard");
       }
     } catch (error) {
       console.log("ERROR: ", error);
@@ -44,6 +50,9 @@ const LoginPage = () => {
   return (
     <div>
       <Toaster />
+      {
+        loadingSpinner && <Spinner />
+      }
 
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 flex items-center justify-center p-4">
         <div className="absolute inset-0 overflow-hidden">

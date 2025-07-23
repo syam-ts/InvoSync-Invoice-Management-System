@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-     "test": "echo \"No tests defined\" && exit 0"
+    "test": "echo \"No tests defined\" && exit 0"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
@@ -23,6 +23,7 @@
     "react-dom": "^19.1.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.7.0",
+    "react-spinners": "^0.17.0",
     "redux-persist": "^6.0.0",
     "sonner": "^2.0.6",
     "tailwindcss": "^4.1.11"

@@ -3,9 +3,9 @@ import { UserService } from "../../services/api/userServices";
 import { toastError } from "../../utils/sonner/toastError";
 import ClientCard from "../../components/user/ClientsCard";
 import type { IClients } from "../../helper/interfaces/IClient";
+import { Spinner } from "../../features/spinner/react-spinner";
 
 const Dashboard = () => {
-    
     const [clients, setClients] = useState<IClients[]>([
         {
             companyName: "",
@@ -15,15 +15,20 @@ const Dashboard = () => {
             panNumber: "",
         },
     ]);
+      const [loadingSpinner, setLoadingSpinner] = useState<boolean>(false);
+
 
     useEffect(() => {
+        setLoadingSpinner(true)
         try {
             const getMyClientFunction = async () => {
                 const response = await UserService.getMyClients();
 
                 if (!response.success) {
+                    setLoadingSpinner(false)
                     toastError(response.message);
                 } else {
+                    setLoadingSpinner(false)
                     setClients(response.clients);
                 }
             };
@@ -36,6 +41,9 @@ const Dashboard = () => {
 
     return (
         <div className="w-full h-screen">
+            {
+                loadingSpinner &&  <Spinner />
+            }
             <div>
                 <h1 className="text-4xl text-center text-white pt-20 font-bold">
                     Dashboard
