@@ -13,6 +13,7 @@ import GuestRoute from "./ProtectredRoute/GuestProtectedRoute.tsx";
 import NotAuthProtectedRoute from "./ProtectredRoute/NotAuthProtectedRoute.tsx";
 import Invoices from "../pages/invoice/Invoices.tsx";
 import { ROUTE } from "../utils/constants/route.ts";
+import NotFoundPage from "../pages/common/NotfoundPage.tsx";
 
 const { LOGIN, SIGNUP } = ROUTE;
 const {
@@ -29,6 +30,7 @@ export const router = createBrowserRouter([
     {
         element: <Layout />,
         children: [
+            
             {
                 path: LOGIN,
                 element: (
@@ -110,5 +112,9 @@ export const router = createBrowserRouter([
                 ),
             },
         ],
+    },
+    {
+       path: '*',
+       element: <NotFoundPage />
     },
 ]);
