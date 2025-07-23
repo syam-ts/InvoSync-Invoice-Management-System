@@ -1,5 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
-import Layout from "../pages/common/Layout.tsx";
+import { createBrowserRouter } from "react-router-dom"; 
 import Login from "../pages/user/Login.tsx";
 import Signup from "../pages/user/Signup.tsx";
 import Dashboard from "../pages/user/Dashboard.tsx";
@@ -13,7 +12,8 @@ import GuestRoute from "./ProtectredRoute/GuestProtectedRoute.tsx";
 import NotAuthProtectedRoute from "./ProtectredRoute/NotAuthProtectedRoute.tsx";
 import Invoices from "../pages/invoice/Invoices.tsx";
 import { ROUTE } from "../utils/constants/route.ts";
-import NotFoundPage from "../pages/common/NotfoundPage.tsx";
+import NotFoundPage from "../pages/common/NotfoundPage.tsx"; 
+import Layout from "../components/common/Layout.tsx";
 
 const { LOGIN, SIGNUP } = ROUTE;
 const {
